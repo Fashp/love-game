@@ -6,7 +6,7 @@ local dx, dy = 0, 0
 local p = {}
 
 --loads the player 
-function playerLoad(xPos, yPos, speed)
+function playerLoad(xPos, yPos, speed, spawnTile)
 	--movement stuff
 	p.x = xPos
 	p.y = yPos
@@ -16,8 +16,7 @@ function playerLoad(xPos, yPos, speed)
 	p.direction = 0 --0 down, 1 up, 2 left, 3 right
 
 	--player starting tile
-	p.tx = xPos/kTileSize
-	p.ty = yPos/kTileSize
+	p.tx, p.ty = spawnTile, spawnTile
 
 	--load player sprite sheet
 	p.sheet = love.graphics.newImage("images/player.png")
@@ -46,14 +45,14 @@ function playerDraw()
 	else
 		love.graphics.print("IDLE: ", 10, 10)
 	end
-	love.graphics.print(TiledMap_GetMapTile(p.ty, p.tx, 1) .. ' ' .. TiledMap_GetMapTile(p.ty, p.tx, 2), 10, 20)
+	--love.graphics.print(TiledMap_GetMapTile(p.ty, p.tx, 1) .. ' ' .. TiledMap_GetMapTile(p.ty, p.tx, 2), 10, 20)
 	love.graphics.print(p.x .. ' ' .. p.y,10, 30)
 end
 
 --Checks to make sure the player wont collide after moving
 function canMove()
-	local targetTile = TiledMap_GetMapTile(p.ty, p.tx, 2)
-
+	--local targetTile = TiledMap_GetMapTile(p.ty, p.tx, 2)
+	local targetTile = 0
 	if (targetTile > 0) then
 		return false
 	end

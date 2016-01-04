@@ -1,8 +1,14 @@
-love.filesystem.load("tiledmap.lua")()
+--love.filesystem.load("tiledmap.lua")()
 require 'player'
+require 'map_helper'
 
---These should always be multiples of kTileSize
-gCamX, gCamY = 256, 256
+playerSpawnTile = 8
+playerSpeed = 8
+
+kTileSize = 32
+
+gCamX = 0
+gCamY = 0
 
 gKeyPressed = {}
 world = {}
@@ -48,13 +54,17 @@ end
 
 --main load function
 function love.load()
-	TiledMap_Load("maps/testmap1.tmx")
-	playerLoad(gCamX, gCamY, 8)
+	--TiledMap_Load("maps/testmap1.tmx")
+	love.filesystem.load("maps/lab1.lua")()
+	gCamX, gCamY = playerSpawnTile * kTileSize, playerSpawnTile * kTileSize
+	playerLoad(gCamX, gCamY, playerSpeed, playerSpawnTile)
 end
 
 --main render function
 function love.draw()
-	TiledMap_DrawNearCam(gCamX, gCamY)
+	--TiledMap_DrawNearCam(gCamX, gCamY)
+	--drawMap()
+	drawNearCam(gCamX, gCamY)
 	playerDraw()
 	gCamX, gCamY = playerGetCoords()
 end
