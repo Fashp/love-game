@@ -44,17 +44,16 @@ function playerDraw()
 	love.graphics.draw(p.sheet, p.sprites[spriteMap], xPos, yPos)
 	
 	--Debug messages
-	if (p.moving) then
-		love.graphics.print("MOVING: ", 10, 10)
-	else
-		love.graphics.print("IDLE: ", 10, 10)
-	end
-	love.graphics.print(p.x .. ' ' .. p.y,10, 30)
+	--love.graphics.print(p.x .. ' ' .. p.y,10, 30)
+	love.graphics.print(getAdjacencyValue(2, p.ty, p.tx), 10, 10)
+	love.graphics.print(getTileAt(1, p.ty, p.tx), 10, 30)
+	love.graphics.print(getTileAt(2, p.ty, p.tx), 10, 50)
 end
 
 --Checks to make sure the player wont collide after moving
 function canMove()
 	local targetTile = getTileAt(2, p.ty, p.tx)
+	--local targetTile = 0
 	if (targetTile > 0) then
 		return false
 	end

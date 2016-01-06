@@ -1,3 +1,5 @@
+require 'maps/smoother'
+
 --variables
 local spriteLayers = {"images/caveGround.png", "images/caveWalls.png"}
 local tWidth, tHeight = 16, 16
@@ -16,6 +18,10 @@ end
 --do generation for layer 2
 local function layer2(x, y)
 	if x == 0 or y == 0 or x == width or y == height then
+		return 4
+	end
+
+	if love.math.random() > .85 then
 		return 4
 	end
 
@@ -43,5 +49,7 @@ function generateCave(xSize, ySize)
 
 		end
 	end
+
+	tileTable = smooth(tileTable)
 	loadTiles(tWidth, tHeight, spriteLayers, tileTable)
 end
