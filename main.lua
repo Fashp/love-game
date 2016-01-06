@@ -1,17 +1,23 @@
---love.filesystem.load("tiledmap.lua")()
 require 'player'
 require 'map_helper'
+require 'maps/caveGen'
 
-playerSpawnTile = 8
-playerSpeed = 8
+--player variables
+playerSpawnTile = 1
+playerSpeed = 4
 
-kTileSize = 32
+--global scale
+scale = 2
+
+--size of all tiles (player and map)
+kTileSize = 16
 
 gCamX = 0
 gCamY = 0
 
 gKeyPressed = {}
 world = {}
+
 local directions = {}
 directions["down"] = 0
 directions["up"] = 1
@@ -33,7 +39,7 @@ end
 
 --main update function
 function love.update(dt)
-	--These directions are fucked too
+	--These directions are goofed too
 	dirX, dirY, dir = 0, 0, 0
 	if gKeyPressed.up then
 		dirX = -1
@@ -54,16 +60,14 @@ end
 
 --main load function
 function love.load()
-	--TiledMap_Load("maps/testmap1.tmx")
-	love.filesystem.load("maps/lab1.lua")()
+	generateCave(16, 16)
 	gCamX, gCamY = playerSpawnTile * kTileSize, playerSpawnTile * kTileSize
 	playerLoad(gCamX, gCamY, playerSpeed, playerSpawnTile)
 end
 
 --main render function
 function love.draw()
-	--TiledMap_DrawNearCam(gCamX, gCamY)
-	--drawMap()
+	love.graphics.scale(scale,scale)
 	drawNearCam(gCamX, gCamY)
 	playerDraw()
 	gCamX, gCamY = playerGetCoords()

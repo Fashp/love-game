@@ -1,5 +1,5 @@
 --variables
-local tileX, tileY = 32, 32
+local tileX, tileY = 16, 16
 local dx, dy = 0, 0
 
 --Player object
@@ -10,7 +10,7 @@ function playerLoad(xPos, yPos, speed, spawnTile)
 	--movement stuff
 	p.x = xPos
 	p.y = yPos
-	p.speed = speed/kTileSize
+	p.speed = speed/kTileSize/scale
 	p.distance = 0
 	p.moving = false
 	p.direction = 0 --0 down, 1 up, 2 left, 3 right
@@ -20,6 +20,8 @@ function playerLoad(xPos, yPos, speed, spawnTile)
 
 	--load player sprite sheet
 	p.sheet = love.graphics.newImage("images/player.png")
+	p.sheet:setFilter('nearest', 'nearest')
+
 	p.step = 0
 	local width, height = p.sheet:getDimensions()
 	p.animationSteps = width / kTileSize
@@ -37,7 +39,9 @@ end
 --renders the player
 function playerDraw()
 	spriteMap = (p.animationSteps * p.direction) + p.step
-	love.graphics.draw(p.sheet, p.sprites[spriteMap], 300, 300)
+	xPos = love.graphics.getWidth()/(2*scale)
+	yPos = love.graphics.getHeight()/(2*scale)
+	love.graphics.draw(p.sheet, p.sprites[spriteMap], xPos, yPos)
 	
 	--Debug messages
 	if (p.moving) then
@@ -45,14 +49,12 @@ function playerDraw()
 	else
 		love.graphics.print("IDLE: ", 10, 10)
 	end
-	--love.graphics.print(TiledMap_GetMapTile(p.ty, p.tx, 1) .. ' ' .. TiledMap_GetMapTile(p.ty, p.tx, 2), 10, 20)
 	love.graphics.print(p.x .. ' ' .. p.y,10, 30)
 end
 
 --Checks to make sure the player wont collide after moving
 function canMove()
-	--local targetTile = TiledMap_GetMapTile(p.ty, p.tx, 2)
-	local targetTile = 0
+	local targetTile = getTileAt(2, p.ty, p.tx)
 	if (targetTile > 0) then
 		return false
 	end
