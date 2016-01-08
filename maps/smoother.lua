@@ -58,7 +58,7 @@ wallMap[0001] = 2
 wallMap[1000] = 8
 
 --0 sides
-wallMap[0000] = 4
+wallMap[0000] = 9
 
 local tilesMap = {groundMap, wallMap}
 local tTable = {}
@@ -91,7 +91,7 @@ end
 function smooth(tileTable)
 	tTable = tileTable
 
-	for l=1, #tTable do
+	for l=1, #tilesMap do
 		for y=0, #tTable[l] do
 			local row = tTable[l][y]
 

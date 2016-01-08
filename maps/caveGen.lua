@@ -1,9 +1,8 @@
 require 'maps/smoother'
 
 --variables
-local spriteLayers = {"images/caveGround.png", "images/caveWalls.png"}
+local spriteLayers = {"images/caveGround.png", "images/caveWalls.png", "images/doors.png"}
 local tWidth, tHeight = 16, 16
-local tileTable = {}
 local width
 local height
 
@@ -28,12 +27,21 @@ local function layer2(x, y)
 	return 0
 end
 
+local function layer3(x, y)
+	if x == 8 and y == 0 then
+		return 1
+	end
+
+	return 0
+end
+
 --generate a map with size xSize by ySize
 function generateCave(xSize, ySize)
 	width = xSize
 	height = ySize
+	tileTable = {}
 
-	for l=1,2 do
+	for l=1,#spriteLayers do
 		local layer = {}
 		table.insert(tileTable, layer)
 
@@ -44,6 +52,8 @@ function generateCave(xSize, ySize)
 					layer[y][x] = layer1(x, y)
 				elseif l == 2 then
 					layer[y][x] = layer2(x, y)
+				elseif l == 3 then
+					layer[y][x] = layer3(x, y)
 				end
 			end
 

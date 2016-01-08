@@ -45,16 +45,16 @@ function playerDraw()
 	
 	--Debug messages
 	--love.graphics.print(p.x .. ' ' .. p.y,10, 30)
-	love.graphics.print(getAdjacencyValue(2, p.ty, p.tx), 10, 10)
-	love.graphics.print(getTileAt(1, p.ty, p.tx), 10, 30)
-	love.graphics.print(getTileAt(2, p.ty, p.tx), 10, 50)
+	--love.graphics.print(decToHex(rSeed), 10, 10)
+	--love.graphics.print(getTileAt(1, p.ty, p.tx), 10, 30)
+	--love.graphics.print(getTileAt(2, p.ty, p.tx), 10, 50)
 end
 
 --Checks to make sure the player wont collide after moving
 function canMove()
 	local targetTile = getTileAt(2, p.ty, p.tx)
 	--local targetTile = 0
-	if (targetTile > 0) then
+	if (targetTile > 0 and getTileAt(3, p.ty, p.tx) == 0) then
 		return false
 	end
 	return true
@@ -99,6 +99,10 @@ function playerMove(dirX, dirY, dir)
 		dy = 0
 		p.distance = 0
 		p.step = 0
+
+		if getTileAt(3, p.ty, p.tx) > 0 then
+			nextLevel()
+		end
 	end
 end
 
