@@ -16,7 +16,9 @@ gCamX = 0
 gCamY = 0
 
 gKeyPressed = {}
-world = {}
+local maps = {}
+local sprites = {}
+
 
 rSeed = 0
 
@@ -26,7 +28,7 @@ directions["up"] = 1
 directions["left"] = 2
 directions["right"] = 3
 
-local level = 1;
+local level = 0;
 
 --update key array on release
 function love.keyreleased(key)
@@ -44,10 +46,8 @@ end
 --main update function
 function love.update(dt)
 	if gKeyPressed.r then
-		local g = {}
-		generateCave(16, 16)
-		level = level + 1
 		gKeyPressed.r = false
+		nextLevel()
 	end
 
 	--These directions are goofed too
@@ -69,6 +69,7 @@ function love.update(dt)
 	playerMove(dirX, dirY, dir)
 end
 
+--Random seeding funciton
 function loadSeed()
 	rSeed = love.math.random(0, tonumber('FFFFFFFF', 16))
 	love.math.setRandomSeed(rSeed)
@@ -76,9 +77,8 @@ end
 
 --main load function
 function love.load()
-	tt = {}
-	loadSeed()
-	generateCave(16, 16)
+	nextLevel()
+
 	gCamX, gCamY = playerSpawnTile * kTileSize, playerSpawnTile * kTileSize
 	playerLoad(gCamX, gCamY, playerSpeed, playerSpawnTile)
 end
@@ -91,10 +91,26 @@ function love.draw()
 	gCamX, gCamY = playerGetCoords()
 end
 
+--go to next level
 function nextLevel()
-	generateCave(16, 16)
+	map, sprite = generateCave(100, 100)
+	level = level + 1
+	table.insert(maps, map)
+	table.insert(sprites, sprite)
+
+	loadTiles(kTileSize, kTileSize, maps[level], sprites[level])
 end
 
+--go to previous level
+function prevLevel()
+	level = level - 1
+	if level < 1 then
+		level = 1
+	end
+	loadTiles(kTileSize, kTileSize, maps[level], sprites[level])
+end
+
+--convert a decimal number to hex
 function decToHex(IN)
     local B,K,OUT,I,D=16,"0123456789ABCDEF","",0
     while IN>0 do

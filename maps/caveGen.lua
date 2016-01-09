@@ -2,7 +2,6 @@ require 'maps/smoother'
 
 --variables
 local spriteLayers = {"images/caveGround.png", "images/caveWalls.png", "images/doors.png"}
-local tWidth, tHeight = 16, 16
 local width
 local height
 
@@ -10,11 +9,13 @@ local height
 --layer2 is walls
 
 --do generation for layer 1
+--Ground Layer
 local function layer1(x, y)
 	return 9
 end
 
 --do generation for layer 2
+--Walls Layer
 local function layer2(x, y)
 	if x == 0 or y == 0 or x == width or y == height then
 		return 4
@@ -27,12 +28,36 @@ local function layer2(x, y)
 	return 0
 end
 
+--Doors
 local function layer3(x, y)
 	if x == 8 and y == 0 then
 		return 1
 	end
 
 	return 0
+end
+
+local function checkSolvable(startx, starty, endx, endy, map)
+	--walkable tile
+	local walkable = 0
+
+	--imports
+	local Grid = require ("jumper.grid") -- The grid class
+	local Pathfinder = require ("jumper.pathfinder") -- The pathfinder lass
+
+	-- Creates a grid object
+	local grid = Grid(map) 
+	-- Creates a pathfinder object using Jump Point Search
+	local myFinder = Pathfinder(grid, 'JPS', walkable) 
+
+	-- Calculates the path, and its length
+	local path = myFinder:getPath(startx, starty, endx, endy)
+
+	--if path found, we are good
+	if path then
+		return true
+	end
+	return false
 end
 
 --generate a map with size xSize by ySize
@@ -60,6 +85,10 @@ function generateCave(xSize, ySize)
 		end
 	end
 
+	if checkSolvable(1, 1, 8, 1, tileTable[2]) ~= true then
+		generateCave(xSize, ySize)
+	end
+
 	tileTable = smooth(tileTable)
-	loadTiles(tWidth, tHeight, spriteLayers, tileTable)
+	return tileTable, spriteLayers
 end

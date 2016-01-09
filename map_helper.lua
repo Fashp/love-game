@@ -5,7 +5,7 @@ local ceil = math.ceil
 local layerCount = 0
 
 --Generates tileset and fills in tiles array automatically
-function loadTiles(tW, tH, tilesetPath, tileMap)
+function loadTiles(tW, tH, tileMap, tilesetPath)
 	tiletable = tileMap
 	tilesets = {}
 	tiles = {}

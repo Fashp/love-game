@@ -101,7 +101,7 @@ function playerMove(dirX, dirY, dir)
 		p.step = 0
 
 		if getTileAt(3, p.ty, p.tx) > 0 then
-			nextLevel()
+			prevLevel()
 		end
 	end
 end
